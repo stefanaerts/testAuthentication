@@ -1,4 +1,4 @@
- <ul>
+ <!-- <ul>
     <li *ngFor="let item of items | async">
       <input type="text" #updatetext [value]="item.text" />
       <button (click)="updateItem(item.$key, updatetext.value)">Update</button>
@@ -8,3 +8,16 @@
   <input type="text" #newitem />
   <button (click)="addItem(newitem.value)">Add</button>
   <button (click)="deleteEverything()">Delete All</button>
+-->
+
+  <ul>
+    <li *ngFor="let item of items | async">
+      {{ item.text }}
+    </li>
+  </ul>
+  <div>
+    <h4>Filter by size</h4>
+    <button (click)="filterBy('3demess')">Small</button>
+    <button (click)="filterBy('medium')">Medium</button>
+    <button (click)="filterBy('large')">Large</button>
+  </div>

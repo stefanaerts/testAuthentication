@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
  import { AngularFire, FirebaseListObservable} from 'angularfire2';
 // import { AngularFire, FirebaseObjectObservable } from 'angularfire2';
+import { Subject } from 'rxjs/Subject';
 @Component({
   selector: 'app-root',
  templateUrl: 'app.component.html',
@@ -17,13 +18,21 @@ export class AppComponent {
 //  user = {};
 // item: FirebaseObjectObservable<any>;
 items: FirebaseListObservable<any>;
-
+sizeSubject: Subject<any>;
 constructor(
     af: AngularFire
   ) {
+  this.sizeSubject = new Subject();
  // this.item = af.database.object('/item');
   // this.item = af.database.object('/item', { preserveSnapshot: true });
-  this.items = af.database.list('/messages');
+  //this.items = af.database.list('/messages');
+   this.items = af.database.list('/messages', {
+      query: {
+        orderByChild: 'text',
+        equalTo: this.sizeSubject
+      }
+   });
+  }
   // const promise = this.items.push({ name: "newlist" });
   // promise
   // .then(_ => console.log('success'))
@@ -36,8 +45,11 @@ constructor(
  //     user => this._changeState(user),
  //     error => console.trace(error)
  //   );
-}
- addItem(newName: string) {
+  filterBy(text: string) {
+    this.sizeSubject.next(text);
+  }
+
+ /*addItem(newName: string) {
     this.items.push({ text: newName });
   }
   updateItem(key: string, newText: string) {
@@ -49,7 +61,8 @@ constructor(
   deleteEverything() {
     this.items.remove();
   }
-/* save(newName: string) {
+  */
+ /*save(newName: string) {
     this.item.set({ name: newName });
   }
   update(newSize: string) {
